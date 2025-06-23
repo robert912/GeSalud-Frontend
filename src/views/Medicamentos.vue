@@ -144,8 +144,13 @@
                                 </v-col>
 
                                 <v-col cols="12" md="6">
-                                    <v-text-field v-model="medicamentoActual.dosis_habitual" label="Dosis habitual"
-                                        required :rules="[v => !!v || 'La dosis habitual es requerida']"></v-text-field>
+                                    <v-text-field v-model="medicamentoActual.dosis" label="Dosis" required
+                                        :rules="[v => !!v || 'La dosis es requerida']"></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" md="6">
+                                    <v-text-field v-model="medicamentoActual.concentracion" label="Concentración"
+                                        :rules="[v => !!v || 'La concentración es requerida']"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
@@ -164,14 +169,17 @@
                                         ]"></v-text-field>
                                 </v-col>
 
-                                <v-col cols="12">
-                                    <v-textarea v-model="medicamentoActual.indicaciones" label="Indicaciones"
-                                        rows="3"></v-textarea>
+                                <v-col cols="12" md="6">
+                                    <v-text-field v-model="medicamentoActual.frecuencia" label="Frecuencia"></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" md="6">
+                                    <v-text-field v-model="medicamentoActual.duracion" label="Duración"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12">
-                                    <v-textarea v-model="medicamentoActual.contraindicaciones"
-                                        label="Contraindicaciones" rows="3"></v-textarea>
+                                    <v-textarea v-model="medicamentoActual.indicaciones" label="Indicaciones"
+                                        rows="3"></v-textarea>
                                 </v-col>
 
                                 <v-col cols="12">
@@ -260,8 +268,32 @@
                             <template v-slot:prepend>
                                 <v-icon color="primary">mdi-medication</v-icon>
                             </template>
-                            <v-list-item-title>Dosis habitual</v-list-item-title>
-                            <v-list-item-subtitle>{{ medicamentoDetalle.dosis_habitual || '-' }}</v-list-item-subtitle>
+                            <v-list-item-title>Dosis</v-list-item-title>
+                            <v-list-item-subtitle>{{ medicamentoDetalle.dosis || '-' }}</v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item>
+                            <template v-slot:prepend>
+                                <v-icon color="primary">mdi-test-tube</v-icon>
+                            </template>
+                            <v-list-item-title>Concentración</v-list-item-title>
+                            <v-list-item-subtitle>{{ medicamentoDetalle.concentracion || '-' }}</v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item>
+                            <template v-slot:prepend>
+                                <v-icon color="primary">mdi-clock-outline</v-icon>
+                            </template>
+                            <v-list-item-title>Frecuencia</v-list-item-title>
+                            <v-list-item-subtitle>{{ medicamentoDetalle.frecuencia || '-' }}</v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item>
+                            <template v-slot:prepend>
+                                <v-icon color="primary">mdi-calendar-clock</v-icon>
+                            </template>
+                            <v-list-item-title>Duración</v-list-item-title>
+                            <v-list-item-subtitle>{{ medicamentoDetalle.duracion || '-' }}</v-list-item-subtitle>
                         </v-list-item>
 
                         <v-list-item>
@@ -290,15 +322,6 @@
                             </template>
                             <v-list-item-title>Indicaciones</v-list-item-title>
                             <v-list-item-subtitle>{{ medicamentoDetalle.indicaciones || '-' }}</v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-alert-circle</v-icon>
-                            </template>
-                            <v-list-item-title>Contraindicaciones</v-list-item-title>
-                            <v-list-item-subtitle>{{ medicamentoDetalle.contraindicaciones || '-'
-                            }}</v-list-item-subtitle>
                         </v-list-item>
 
                         <v-list-item>
@@ -338,7 +361,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-import Sidebar from '../components/Sidebar.vue';
 import SidebarFarmaceutico from '@/components/SidebarFarmaceutico.vue';
 
 // Table headers
@@ -348,7 +370,8 @@ const headers = [
     { title: 'Uso', key: 'uso', sortable: true },
     { title: 'Tipo', key: 'controlado', sortable: true, align: 'center' },
     { title: 'Presentación', key: 'presentacion', sortable: true },
-    { title: 'Dosis', key: 'dosis_habitual', sortable: false },
+    { title: 'Dosis', key: 'dosis', sortable: false },
+    { title: 'Concentración', key: 'concentracion', sortable: false },
     { title: 'Stock', key: 'stock', sortable: true, align: 'center' },
     { title: 'Valor', key: 'valor', sortable: true, align: 'end' },
     { title: 'Acciones', key: 'actions', sortable: false, align: 'center' }
@@ -395,9 +418,11 @@ const medicamentoActual = ref({
     uso: '',
     controlado: false,
     presentacion: '',
-    dosis_habitual: '',
+    dosis: '',
+    concentracion: '',
+    frecuencia: '',
+    duracion: '',
     indicaciones: '',
-    contraindicaciones: '',
     stock: 0,
     valor: 0,
     activo: true
@@ -504,9 +529,11 @@ const showCreateDialog = () => {
         uso: '',
         controlado: false,
         presentacion: '',
-        dosis_habitual: '',
+        dosis: '',
+        concentracion: '',
+        frecuencia: '',
+        duracion: '',
         indicaciones: '',
-        contraindicaciones: '',
         stock: 0,
         valor: 0,
         activo: true
@@ -583,14 +610,6 @@ const deleteMedicamento = async () => {
 const viewMedicamentoDetails = (medicamento) => {
     medicamentoDetalle.value = { ...medicamento };
     dialogs.value.view = true;
-};
-
-const resetFilters = () => {
-    filters.value = {
-        busqueda: '',
-        controlado: null,
-        stockMinimo: null
-    };
 };
 
 // Lifecycle hooks
