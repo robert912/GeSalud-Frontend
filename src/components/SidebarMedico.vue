@@ -168,17 +168,15 @@ const menuItems = [
     to: '/'
   },
   {
+    title: 'Buscar Receta',
+    icon: 'mdi-note-search-outline',
+    to: '/buscar-receta',
+  },
+  {
     title: 'Crear Receta',
     icon: 'mdi-clipboard-pulse-outline',
     to: '/crear-receta'
-  }//,
-//   {
-//     title: 'Ventas',
-//     icon: 'mdi-cart',
-//     to: '/ventas',
-//     badge: '5',
-//     badgeColor: 'info'
-//   },
+  }
 //   {
 //     title: 'Compras',
 //     icon: 'mdi-cart-plus',
