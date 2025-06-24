@@ -4,8 +4,8 @@
     <SidebarMedico />
 
     <!-- Main Content -->
-    <v-main>
-      <v-container class="py-8">
+    <v-main class="bg-grey-lighten-5">
+      <v-container fluid class="pa-6">
         <!-- Header -->
         <div class="d-flex justify-space-between align-center mb-6">
           <div>

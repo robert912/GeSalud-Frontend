@@ -65,7 +65,7 @@
           </div>
         </div>
         
-        <v-divider class="my-3"></v-divider>
+        <!--v-divider class="my-3"></v-divider>
         
         <div class="menu-section mb-2" v-show="!mini">
           <div class="text-caption text-grey font-weight-medium px-3 py-2">REPORTES</div>
@@ -87,7 +87,7 @@
               {{ item.title }}
             </div>
           </div>
-        </div>
+        </div-->
       </div>
       
       <!-- Perfil de usuario -->

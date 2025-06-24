@@ -36,6 +36,8 @@
         </v-card>
 
         <!-- Tabla de recetas -->
+         <v-card rounded="lg">
+                    <v-card-text class="pa-0">
         <v-data-table :headers="headers" :items="recetas" item-value="id" class="elevation-1">
           <template v-slot:item.rut="{ item }">
             {{ item.paciente.persona.rut }}
@@ -63,6 +65,8 @@
             <v-btn color="info" size="small" @click="verDetalles(item.id)">Ver Detalles</v-btn>
           </template>
         </v-data-table>
+                    </v-card-text>
+        </v-card>
 
         <!-- Dialogo Detalle Receta -->
         <v-dialog v-model="dialogoDetalle" max-width="800">
@@ -194,7 +198,8 @@ onMounted(() => cargarRecetas())
 </script>
 
 <style scoped>
-.v-data-table {
-  margin-top: 16px;
+.v-data-table :deep(th) {
+    background-color: #f5f5f5 !important;
+    font-weight: 600 !important;
 }
 </style>
