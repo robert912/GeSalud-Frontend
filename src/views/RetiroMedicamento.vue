@@ -135,9 +135,8 @@
         </template>
 
         <!-- Mensajes de estado -->
-        <v-alert v-if="error" type="error" class="mt-4">{{ error }}</v-alert>
-        <v-alert v-if="recetas.length === 0 && rutPaciente" type="info" class="mt-4">
-          No se encontraron recetas disponibles para este paciente
+        <v-alert v-if="error" type="info" class="mt-4">
+          {{ error }}
         </v-alert>
 
         <!-- Snackbar para notificaciones -->
@@ -181,7 +180,10 @@ const rules = {
 
 // Métodos
 const buscarPaciente = async () => {
-  if (!rutPaciente.value) return
+  if (!rutPaciente.value) {
+    error.value = 'Ingrese un RUT válido'
+    return
+  }
   
   buscandoPaciente.value = true
   error.value = ''
@@ -199,11 +201,10 @@ const buscarPaciente = async () => {
       // Cargar detalles de cada receta
       await Promise.all(recetas.value.map(receta => cargarDetallesReceta(receta.id)))
     } else {
-      error.value = 'No se encontraron recetas disponibles para este paciente'
+      error.value = recetas.data || 'No se encontraron recetas disponibles para este paciente'
     }
   } catch (err) {
-    console.error('Error al buscar paciente:', err)
-    error.value = 'Paciente no encontrado o error en la búsqueda'
+    error.value = err.response.data || 'Paciente no encontrado o error en la búsqueda'
   } finally {
     buscandoPaciente.value = false
   }
@@ -272,7 +273,14 @@ const getStockColor = (stock) => {
 }
 
 const formatFecha = (fecha) => {
-  return new Date(fecha).toLocaleDateString('es-CL')
+  return new Date(fecha).toLocaleString('es-CL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false // Formato 24 horas
+  })
 }
 
 const showNotification = (text, color = 'success') => {

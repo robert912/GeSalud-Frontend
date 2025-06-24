@@ -2,23 +2,29 @@
   <v-layout>
     <SidebarMedico />
 
-    <v-main>
-      <v-container class="py-8">
-        <h1 class="text-h4 font-weight-bold mb-6">Listado de Recetas</h1>
+    <!-- Main Content -->
+    <v-main class="bg-grey-lighten-5">
+      <v-container fluid class="pa-6">
+        <!-- Header -->
+        <div class="d-flex justify-space-between align-center mb-6">
+          <div>
+            <h1 class="text-h4 font-weight-bold mb-1">Listado de Recetas</h1>
+            <span class="text-subtitle-1 text-medium-emphasis">Administrador de recetas</span>
+          </div>
+        </div>
 
         <!-- Filtros -->
         <v-card class="mb-6" variant="outlined" rounded="lg">
           <v-card-text>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="filters.rut" label="Buscar por RUT"
-                  prepend-inner-icon="mdi-account-search" variant="outlined" density="comfortable" hide-details
-                  clearable @keyup.enter="buscarPorRut" />
+                <v-text-field v-model="filters.rut" label="Buscar por RUT" prepend-inner-icon="mdi-account-search"
+                  variant="outlined" density="comfortable" hide-details @input="buscarPorRut" />
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field v-model="filters.id" label="Buscar por ID de receta" type="number"
                   prepend-inner-icon="mdi-numeric" variant="outlined" density="comfortable" hide-details
-                  clearable @keyup.enter="buscarPorId" />
+                  @input="buscarPorId" />
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-select v-model="filters.estado" :items="['Todos', 'Disponible', 'Retirada']"
@@ -44,7 +50,7 @@
           </template>
 
           <template v-slot:item.fechaCreacion="{ item }">
-            {{ new Date(item.fechaCreacion).toLocaleDateString() }}
+            {{ formatDateTime(item.fechaCreacion) }}
           </template>
 
           <template v-slot:item.disponible="{ item }">
@@ -77,7 +83,8 @@
                       </v-chip>
                     </v-list-item-title>
                     <v-list-item-subtitle>
-                      {{ detalle.concentracion }} | {{ detalle.dosis }} | {{ detalle.frecuencia }} | {{ detalle.duracion }}
+                      {{ detalle.concentracion }} | {{ detalle.dosis }} | {{ detalle.frecuencia }} | {{ detalle.duracion
+                      }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
@@ -94,6 +101,7 @@
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import SidebarMedico from '@/components/SidebarMedico.vue'
+
 
 const recetas = ref([])
 const recetasOriginal = ref([])
@@ -117,6 +125,17 @@ const headers = [
   { title: 'Acción', value: 'accion', sortable: false },
 ]
 
+const formatDateTime = (fecha) => {
+  return new Date(fecha).toLocaleString('es-CL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false // Formato 24 horas
+  })
+}
+
 const cargarRecetas = async () => {
   try {
     const { data } = await axios.get('http://localhost:8080/receta')
@@ -127,26 +146,28 @@ const cargarRecetas = async () => {
   }
 }
 
-const buscarPorRut = async () => {
-  if (!filters.value.rut) {
+const buscarPorRut = () => {
+  const rut = filters.value.rut?.trim().toLowerCase()
+  if (!rut) {
     recetas.value = [...recetasOriginal.value]
     return
   }
-  try {
-    const { data } = await axios.get(`http://localhost:8080/receta/${filters.value.rut}`)
-    recetas.value = Array.isArray(data) ? data : [data]
-  } catch (err) {
-    console.error('Error al buscar por RUT', err)
-    recetas.value = []
-  }
+
+  recetas.value = recetasOriginal.value.filter(r =>
+    r.paciente.persona.rut.toLowerCase().includes(rut)
+  )
 }
 
 const buscarPorId = () => {
-  if (!filters.value.id) {
+  const id = filters.value.id
+  if (!id) {
     recetas.value = [...recetasOriginal.value]
     return
   }
-  recetas.value = recetasOriginal.value.filter(r => r.id === Number(filters.value.id))
+
+  recetas.value = recetasOriginal.value.filter(r => 
+    r.id.toString().includes(id.toString())
+  )
 }
 
 const filtrarEstado = () => {

@@ -31,13 +31,13 @@
                             </v-col>
 
                             <v-col cols="12" sm="6" md="4">
-                                <v-select v-model="filters.controlado" label="Tipo" :items="tiposMedicamento"
-                                    item-title="text" item-value="value" variant="outlined" density="comfortable"
-                                    clearable hide-details></v-select>
+                                <v-select v-model="filters.controlado" label="Tipo" prepend-inner-icon="mdi-pill-off"
+                                    :items="tiposMedicamento" item-title="text" item-value="value" variant="outlined"
+                                    density="comfortable" clearable hide-details></v-select>
                             </v-col>
 
                             <v-col cols="12" sm="6" md="4">
-                                <v-select v-model="filters.stockLevel" :items="[
+                                <v-select v-model="filters.stockLevel" prepend-inner-icon="mdi-barcode-scan" :items="[
                                     { text: 'Crítico (≤5)', value: 'critical' },
                                     { text: 'Bajo (6-10)', value: 'low' },
                                     { text: 'Normal (11-50)', value: 'normal' },
@@ -121,12 +121,14 @@
                         <v-container>
                             <v-row>
                                 <v-col cols="12" md="6">
-                                    <v-text-field v-model="medicamentoActual.nombre" label="Nombre del medicamento"
-                                        required :rules="[v => !!v || 'El nombre es requerido']"></v-text-field>
+                                    <v-text-field v-model="medicamentoActual.nombre" placeholder="Medicamento"
+                                        label="Nombre del medicamento" required
+                                        :rules="[v => !!v || 'El nombre es requerido']"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
-                                    <v-text-field v-model="medicamentoActual.uso" label="Uso" required
+                                    <v-text-field v-model="medicamentoActual.uso"
+                                        placeholder="Inflamación, Fiebre, Alergia" label="Uso" required
                                         :rules="[v => !!v || 'El uso es requerido']"></v-text-field>
                                 </v-col>
 
@@ -139,17 +141,20 @@
                                 </v-col>
 
                                 <v-col cols="12" md="6">
-                                    <v-text-field v-model="medicamentoActual.presentacion" label="Presentación" required
+                                    <v-text-field v-model="medicamentoActual.presentacion"
+                                        placeholder="Comprimidos, Jarabe, Capsulas" label="Presentación" required
                                         :rules="[v => !!v || 'La presentación es requerida']"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
-                                    <v-text-field v-model="medicamentoActual.dosis" label="Dosis" required
+                                    <v-text-field v-model="medicamentoActual.dosis"
+                                        placeholder="1 Comprimido, 1 Capsula" label="Dosis" required
                                         :rules="[v => !!v || 'La dosis es requerida']"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
-                                    <v-text-field v-model="medicamentoActual.concentracion" label="Concentración"
+                                    <v-text-field v-model="medicamentoActual.concentracion" placeholder="500 mg"
+                                        label="Concentración"
                                         :rules="[v => !!v || 'La concentración es requerida']"></v-text-field>
                                 </v-col>
 
@@ -170,16 +175,18 @@
                                 </v-col>
 
                                 <v-col cols="12" md="6">
-                                    <v-text-field v-model="medicamentoActual.frecuencia" label="Frecuencia"></v-text-field>
+                                    <v-text-field v-model="medicamentoActual.frecuencia" placeholder="Cada 8 horas.."
+                                        label="Frecuencia"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
-                                    <v-text-field v-model="medicamentoActual.duracion" label="Duración"></v-text-field>
+                                    <v-text-field v-model="medicamentoActual.duracion" placeholder="5 días"
+                                        label="Duración"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12">
-                                    <v-textarea v-model="medicamentoActual.indicaciones" label="Indicaciones"
-                                        rows="3"></v-textarea>
+                                    <v-textarea v-model="medicamentoActual.indicaciones"
+                                        placeholder="Tomar en ayunas..." label="Indicaciones" rows="3"></v-textarea>
                                 </v-col>
 
                                 <!--v-col cols="12">
@@ -229,120 +236,134 @@
 
         <!-- View Medicamento Details Dialog -->
         <v-dialog v-model="dialogs.view" max-width="700px">
-            <v-card v-if="medicamentoDetalle">
-                <v-toolbar color="info" :title="medicamentoDetalle.nombre">
+            <v-card v-if="medicamentoDetalle" rounded="lg">
+                <v-toolbar color="info" density="compact" :title="medicamentoDetalle.nombre">
                     <v-btn icon="mdi-close" variant="text" @click="dialogs.view = false"></v-btn>
                 </v-toolbar>
 
-                <v-card-text>
-                    <v-list>
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-information-outline</v-icon>
-                            </template>
-                            <v-list-item-title>Uso</v-list-item-title>
-                            <v-list-item-subtitle>{{ medicamentoDetalle.uso || '-' }}</v-list-item-subtitle>
-                        </v-list-item>
+                <v-card-text class="pa-6">
+                    <v-row>
+                        <!-- Columna Izquierda -->
+                        <v-col cols="12" md="6">
+                            <!-- Uso -->
+                            <div class="d-flex align-center mb-4">
+                                <v-icon color="primary" class="mr-3">mdi-information-outline</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Uso</div>
+                                    <div class="text-body-1">{{ medicamentoDetalle.uso || '-' }}</div>
+                                </div>
+                            </div>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-pill</v-icon>
-                            </template>
-                            <v-list-item-title>Tipo</v-list-item-title>
-                            <v-list-item-subtitle>
-                                <v-chip :color="medicamentoDetalle.controlado ? 'orange' : 'green'" size="small">
-                                    {{ medicamentoDetalle.controlado ? 'Controlado' : 'No controlado' }}
-                                </v-chip>
-                            </v-list-item-subtitle>
-                        </v-list-item>
+                            <!-- Tipo -->
+                            <div class="d-flex align-center mb-4">
+                                <v-icon color="primary" class="mr-3">mdi-pill</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Tipo</div>
+                                    <v-chip :color="medicamentoDetalle.controlado ? 'orange' : 'green'" size="small"
+                                        class="mt-1">
+                                        {{ medicamentoDetalle.controlado ? 'Controlado' : 'No controlado' }}
+                                    </v-chip>
+                                </div>
+                            </div>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-package-variant</v-icon>
-                            </template>
-                            <v-list-item-title>Presentación</v-list-item-title>
-                            <v-list-item-subtitle>{{ medicamentoDetalle.presentacion || '-' }}</v-list-item-subtitle>
-                        </v-list-item>
+                            <!-- Presentación -->
+                            <div class="d-flex align-center mb-4">
+                                <v-icon color="primary" class="mr-3">mdi-package-variant</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Presentación</div>
+                                    <div class="text-body-1">{{ medicamentoDetalle.presentacion || '-' }}</div>
+                                </div>
+                            </div>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-medication</v-icon>
-                            </template>
-                            <v-list-item-title>Dosis</v-list-item-title>
-                            <v-list-item-subtitle>{{ medicamentoDetalle.dosis || '-' }}</v-list-item-subtitle>
-                        </v-list-item>
+                            <!-- Dosis -->
+                            <div class="d-flex align-center mb-4">
+                                <v-icon color="primary" class="mr-3">mdi-medication</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Dosis</div>
+                                    <div class="text-body-1">{{ medicamentoDetalle.dosis || '-' }}</div>
+                                </div>
+                            </div>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-test-tube</v-icon>
-                            </template>
-                            <v-list-item-title>Concentración</v-list-item-title>
-                            <v-list-item-subtitle>{{ medicamentoDetalle.concentracion || '-' }}</v-list-item-subtitle>
-                        </v-list-item>
+                            <!-- Concentración -->
+                            <div class="d-flex align-center">
+                                <v-icon color="primary" class="mr-3">mdi-test-tube</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Concentración</div>
+                                    <div class="text-body-1">{{ medicamentoDetalle.concentracion || '-' }}</div>
+                                </div>
+                            </div>
+                        </v-col>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-clock-outline</v-icon>
-                            </template>
-                            <v-list-item-title>Frecuencia</v-list-item-title>
-                            <v-list-item-subtitle>{{ medicamentoDetalle.frecuencia || '-' }}</v-list-item-subtitle>
-                        </v-list-item>
+                        <!-- Columna Derecha -->
+                        <v-col cols="12" md="6">
+                            <!-- Frecuencia -->
+                            <div class="d-flex align-center mb-4">
+                                <v-icon color="primary" class="mr-3">mdi-clock-outline</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Frecuencia</div>
+                                    <div class="text-body-1">{{ medicamentoDetalle.frecuencia || '-' }}</div>
+                                </div>
+                            </div>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-calendar-clock</v-icon>
-                            </template>
-                            <v-list-item-title>Duración</v-list-item-title>
-                            <v-list-item-subtitle>{{ medicamentoDetalle.duracion || '-' }}</v-list-item-subtitle>
-                        </v-list-item>
+                            <!-- Duración -->
+                            <div class="d-flex align-center mb-4">
+                                <v-icon color="primary" class="mr-3">mdi-calendar-clock</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Duración</div>
+                                    <div class="text-body-1">{{ medicamentoDetalle.duracion || '-' }}</div>
+                                </div>
+                            </div>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-numeric</v-icon>
-                            </template>
-                            <v-list-item-title>Stock</v-list-item-title>
-                            <v-list-item-subtitle>
-                                <v-chip :color="getStockColor(medicamentoDetalle.stock)" size="small">
-                                    {{ medicamentoDetalle.stock || '-' }}
-                                </v-chip>
-                            </v-list-item-subtitle>
-                        </v-list-item>
+                            <!-- Stock -->
+                            <div class="d-flex align-center mb-4">
+                                <v-icon color="primary" class="mr-3">mdi-numeric</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Stock</div>
+                                    <v-chip :color="getStockColor(medicamentoDetalle.stock)" size="small" class="mt-1">
+                                        {{ medicamentoDetalle.stock || '-' }}
+                                    </v-chip>
+                                </div>
+                            </div>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-cash</v-icon>
-                            </template>
-                            <v-list-item-title>Valor</v-list-item-title>
-                            <v-list-item-subtitle>{{ formatPrecio(medicamentoDetalle.valor) }}</v-list-item-subtitle>
-                        </v-list-item>
+                            <!-- Valor -->
+                            <div class="d-flex align-center mb-4">
+                                <v-icon color="primary" class="mr-3">mdi-cash</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Valor</div>
+                                    <div class="text-body-1">{{ formatPrecio(medicamentoDetalle.valor) }}</div>
+                                </div>
+                            </div>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-text</v-icon>
-                            </template>
-                            <v-list-item-title>Indicaciones</v-list-item-title>
-                            <v-list-item-subtitle>{{ medicamentoDetalle.indicaciones || '-' }}</v-list-item-subtitle>
-                        </v-list-item>
+                            <!-- Estado -->
+                            <div class="d-flex align-center">
+                                <v-icon color="primary" class="mr-3">mdi-check-circle</v-icon>
+                                <div>
+                                    <div class="text-caption text-medium-emphasis">Estado</div>
+                                    <v-chip :color="medicamentoDetalle.activo ? 'success' : 'error'" size="small"
+                                        class="mt-1">
+                                        {{ medicamentoDetalle.activo ? 'Activo' : 'Inactivo' }}
+                                    </v-chip>
+                                </div>
+                            </div>
+                        </v-col>
+                    </v-row>
 
-                        <v-list-item>
-                            <template v-slot:prepend>
-                                <v-icon color="primary">mdi-check-circle</v-icon>
-                            </template>
-                            <v-list-item-title>Estado</v-list-item-title>
-                            <v-list-item-subtitle>
-                                <v-chip :color="medicamentoDetalle.activo ? 'success' : 'error'" size="small">
-                                    {{ medicamentoDetalle.activo ? 'Activo' : 'Inactivo' }}
-                                </v-chip>
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
+                    <!-- Indicaciones (full width) -->
+                    <v-divider class="my-4"></v-divider>
+                    <div class="d-flex align-start">
+                        <v-icon color="primary" class="mr-3 mt-1">mdi-text</v-icon>
+                        <div>
+                            <div class="text-caption text-medium-emphasis mb-2">Indicaciones</div>
+                            <div class="text-body-1">{{ medicamentoDetalle.indicaciones || '-' }}</div>
+                        </div>
+                    </div>
                 </v-card-text>
 
-                <v-card-actions>
+                <v-card-actions class="px-6 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" variant="text" prepend-icon="mdi-pencil"
+                    <v-btn color="primary" variant="flat" prepend-icon="mdi-pencil"
                         @click="editMedicamento(medicamentoDetalle)">
-                        Editar
+                        Editar Medicamento
                     </v-btn>
                 </v-card-actions>
             </v-card>

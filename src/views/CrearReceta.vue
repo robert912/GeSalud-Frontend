@@ -114,6 +114,8 @@
                         v-model="detalle.medicamento"
                         :items="medicamentos"
                         item-title="nombre"
+                        placeholder="Seleccionar Medicamento"
+                        :rules="[rules.required]"
                         return-object
                         label="Seleccionar Medicamento"
                         variant="outlined"
@@ -142,6 +144,7 @@
                     <v-col cols="6" md="3">
                       <v-text-field 
                         v-model="detalle.concentracion"
+                        :rules="[rules.required]"
                         label="Concentración"
                         variant="outlined"
                       />
@@ -149,6 +152,7 @@
                     <v-col cols="6" md="3">
                       <v-text-field 
                         v-model="detalle.dosis"
+                        :rules="[rules.required]"
                         label="Dosis"
                         variant="outlined"
                       />
@@ -156,6 +160,7 @@
                     <v-col cols="6" md="3">
                       <v-text-field 
                         v-model="detalle.frecuencia"
+                        :rules="[rules.required]"
                         label="Frecuencia"
                         variant="outlined"
                       />
@@ -163,6 +168,7 @@
                     <v-col cols="6" md="3">
                       <v-text-field 
                         v-model="detalle.duracion"
+                        :rules="[rules.required]"
                         label="Duración"
                         variant="outlined"
                       />
@@ -195,7 +201,7 @@
               color="primary" 
               @click="guardarReceta"
               :loading="guardando"
-              :disabled="detalles.length === 0"
+              :disabled="!formularioValido"
             >
               Guardar Receta
             </v-btn>
@@ -203,8 +209,7 @@
         </template>
 
         <!-- Mensajes de estado -->
-        <v-alert v-if="error" type="error" variant="tonal" class="mt-4">
-          <v-icon icon="mdi-alert-circle" start />
+        <v-alert v-if="error" type="info" variant="tonal" class="mt-4">
           {{ error }}
         </v-alert>
       </v-container>
@@ -223,6 +228,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import axios from 'axios'
 import SidebarMedico from '@/components/SidebarMedico.vue'
 
@@ -272,7 +278,7 @@ const buscarPaciente = async () => {
     paciente.value = data
   } catch (err) {
     paciente.value = null
-    error.value = 'Paciente no encontrado'
+    error.value = err.response.data || 'Paciente no encontrado'
   } finally {
     buscandoPaciente.value = false
   }
@@ -320,8 +326,30 @@ const resetearFormulario = () => {
   error.value = ''
 }
 
+const formularioValido = computed(() => {
+  // Verificar paciente
+  if (!paciente.value) return false
+  
+  // Verificar al menos un medicamento
+  if (detalles.value.length === 0) return false
+  
+  // Verificar cada detalle completo
+  return detalles.value.every(detalle => 
+    detalle.medicamento && 
+    detalle.concentracion?.trim() && 
+    detalle.dosis?.trim() && 
+    detalle.frecuencia?.trim() && 
+    detalle.duracion?.trim()
+  )
+})
+
 const guardarReceta = async () => {
-  if (!validarReceta()) return
+  if (!formularioValido.value) {
+    showNotification('Complete todos los campos requeridos', 'error', 'mdi-alert-circle')
+    // Abrir todos los paneles para mostrar errores
+    panelAbierto.value = [...Array(detalles.value.length).keys()]
+    return
+  }
 
   guardando.value = true
   error.value = ''
