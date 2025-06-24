@@ -102,7 +102,7 @@
                             <div class="text-caption">{{ detalle.medicamento.concentracion }}</div>
                           </td>
                           <td>{{ detalle.medicamento.presentacion }}</td>
-                          <td>{{ detalle.dosis }} {{ detalle.frecuencia }}</td>
+                          <td>{{ detalle.dosis }} {{ detalle.frecuencia }} * {{ detalle.duracion }}</td>
                           <td>
                             <v-chip :color="getStockColor(detalle.medicamento.stock)" size="small">
                               {{ detalle.medicamento.stock }}
@@ -235,11 +235,17 @@ const entregarMedicamento = async (detalle, recetaId) => {
       ...detalle.medicamento,
       stock: nuevoStock,
     });
+
+    // 3. Registrar el retiro
+    await axios.post(`http://localhost:8080/retiro`, {
+      detalleReceta: detalle.id,
+      farmaceutico: 1
+    })
     
-    // 3. Actualizar lista de detalles
+    // 4. Actualizar lista de detalles
     await cargarDetallesReceta(recetaId)
     
-    // 4. Verificar si todos los detalles están entregados
+    // 5. Verificar si todos los detalles están entregados
     const todosEntregados = detallesReceta.value[recetaId].every(d => !d.activo)
     if (todosEntregados) {
       await axios.put(`http://localhost:8080/receta/bloquear/${recetaId}`)

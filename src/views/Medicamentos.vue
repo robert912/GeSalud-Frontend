@@ -182,10 +182,10 @@
                                         rows="3"></v-textarea>
                                 </v-col>
 
-                                <v-col cols="12">
+                                <!--v-col cols="12">
                                     <v-switch v-model="medicamentoActual.activo" label="Activo"
                                         color="primary"></v-switch>
-                                </v-col>
+                                </v-col-->
                             </v-row>
                         </v-container>
                     </v-form>
