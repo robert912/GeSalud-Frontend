@@ -144,33 +144,44 @@
                     <v-col cols="6" md="3">
                       <v-text-field 
                         v-model="detalle.concentracion"
-                        :rules="[rules.required]"
                         label="Concentración"
                         variant="outlined"
+                        hint="Indica la concentración del principio activo (ej: 500mg)"
+                        persistent-hint
+                        :rules="[v => !!v || 'Indica la concentración del principio activo (ej: 500mg)']"
                       />
                     </v-col>
+
                     <v-col cols="6" md="3">
                       <v-text-field 
                         v-model="detalle.dosis"
-                        :rules="[rules.required]"
                         label="Dosis"
                         variant="outlined"
+                        hint="Cantidad a administrar por toma (ej: 1 comprimido)"
+                        persistent-hint
+                        :rules="[v => !!v || 'Cantidad a administrar por toma (ej: 1 comprimido)']"
                       />
                     </v-col>
+
                     <v-col cols="6" md="3">
                       <v-text-field 
                         v-model="detalle.frecuencia"
-                        :rules="[rules.required]"
                         label="Frecuencia"
                         variant="outlined"
+                        hint="Frecuencia de administración (ej: cada 8 horas)"
+                        persistent-hint
+                        :rules="[v => !!v || 'Frecuencia de administración (ej: cada 8 horas)']"
                       />
                     </v-col>
+
                     <v-col cols="6" md="3">
                       <v-text-field 
                         v-model="detalle.duracion"
-                        :rules="[rules.required]"
                         label="Duración"
                         variant="outlined"
+                        hint="Duración del tratamiento (ej: 7 días)"
+                        persistent-hint
+                        :rules="[v => !!v || 'Duración del tratamiento (ej: 7 días)']"
                       />
                     </v-col>
                   </v-row>

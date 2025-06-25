@@ -88,6 +88,15 @@
                                 </div>
                             </template>
 
+			    <template v-for="header in headers" :key="header.key" v-slot:[`header.${header.key}`]>
+		                    <v-tooltip location="top">
+		                        <template #activator="{ props }">
+		                        <span v-bind="props">{{ header.title }}</span>
+		                        </template>
+		                        <span>{{ header.description }}</span>
+		                    </v-tooltip>
+                            </template> 
+
                             <!-- Empty State -->
                             <template v-slot:no-data>
                                 <div class="d-flex flex-column align-center pa-12">
@@ -386,16 +395,16 @@ import SidebarFarmaceutico from '@/components/SidebarFarmaceutico.vue';
 
 // Table headers
 const headers = [
-    { title: 'ID', key: 'id', sortable: true },
-    { title: 'Nombre', key: 'nombre', sortable: true },
-    { title: 'Uso', key: 'uso', sortable: true },
-    { title: 'Tipo', key: 'controlado', sortable: true, align: 'center' },
-    { title: 'Presentación', key: 'presentacion', sortable: true },
-    { title: 'Dosis', key: 'dosis', sortable: false },
-    { title: 'Concentración', key: 'concentracion', sortable: false },
-    { title: 'Stock', key: 'stock', sortable: true, align: 'center' },
-    { title: 'Valor', key: 'valor', sortable: true, align: 'end' },
-    { title: 'Acciones', key: 'actions', sortable: false, align: 'center' }
+  { title: 'ID', key: 'id', description: 'Identificador único del medicamento', sortable: true },
+  { title: 'Nombre', key: 'nombre', description: 'Nombre comercial del medicamento', sortable: true },
+  { title: 'Uso', key: 'uso', description: 'Uso terapéutico del medicamento', sortable: true },
+  { title: 'Tipo', key: 'controlado', description: 'Indica si el medicamento es controlado', sortable: true, align: 'center' },
+  { title: 'Presentación', key: 'presentacion', description: 'Forma en que se presenta el medicamento', sortable: true },
+  { title: 'Dosis', key: 'dosis', description: 'Cantidad a administrar', sortable: false },
+  { title: 'Concentración', key: 'concentracion', description: 'Concentración del principio activo', sortable: false },
+  { title: 'Stock', key: 'stock', description: 'Cantidad disponible en inventario', sortable: true, align: 'center' },
+  { title: 'Valor', key: 'valor', description: 'Precio unitario del medicamento', sortable: true, align: 'end' },
+  { title: 'Acciones', key: 'actions', description: 'Editar, eliminar o ver detalles', sortable: false, align: 'center' }
 ];
 
 // Estado

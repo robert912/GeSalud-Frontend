@@ -13,7 +13,7 @@
       <div class="sidebar-header pa-4 d-flex align-center">
         
         <div class="app-title ml-3" v-show="!mini">
-          <h1 >Gesalud</h1>
+          <h1 >GeSalud</h1>
           <span class="text-caption text-grey">Sistema de Gestión de Salud</span>
         </div>
         
@@ -33,13 +33,9 @@
       
       <!-- Menú principal -->
       <div class="pa-3">
-        <div class="menu-section mb-2" v-show="!mini">
-          <div class="text-caption text-grey font-weight-medium px-3 py-2">MENÚ PRINCIPAL</div>
-        </div>
-        
         <div class="menu-items">
           <div
-            v-for="(item, index) in menuItems"
+            v-for="(item, index) in principalItems"
             :key="index"
             class="menu-item d-flex align-center"
             :class="{ active: item.to === currentRoute, 'justify-center': mini }"
@@ -65,18 +61,18 @@
           </div>
         </div>
         
-        <!--v-divider class="my-3"></v-divider>
-        
+        <v-divider class="my-3"></v-divider> 
+
         <div class="menu-section mb-2" v-show="!mini">
-          <div class="text-caption text-grey font-weight-medium px-3 py-2">REPORTES</div>
+          <div class="text-caption text-grey font-weight-bold px-3 py-2">GESTION MEDICAMENTOS</div>
         </div>
-        
+
         <div class="menu-items">
           <div
-            v-for="(item, index) in reportItems"
+            v-for="(item, index) in recetasItems"
             :key="index"
             class="menu-item d-flex align-center"
-            :class="{ active: item.to === currentRoute, 'justify-center': mini }"
+            :class="{ active: item.to === currentRoute, 'justify-center': mini, 'disabled-item': item.disabled }"
             @click="navigate(item.to)"
           >
             <div class="menu-icon">
@@ -86,8 +82,18 @@
             <div class="menu-title" v-show="!mini">
               {{ item.title }}
             </div>
+            
+            <div class="menu-badge ml-auto" v-if="item.badge && !mini">
+              <v-chip
+                size="x-small"
+                :color="item.badgeColor || 'primary'"
+                class="font-weight-medium"
+              >
+                {{ item.badge }}
+              </v-chip>
+            </div>
           </div>
-        </div-->
+        </div>        
       </div>
       
       <!-- Perfil de usuario -->
@@ -96,8 +102,8 @@
         <div class="pa-4 d-flex align-center">
           <v-avatar size="36">
             <v-icon
-                    icon="mdi-medical-bag"
-                    size="36"
+                    icon="mdi-account-tie"
+                    size="44"
                     color=""
                     class=""
             ></v-icon>
@@ -106,7 +112,7 @@
           <div class="user-info ml-3" v-show="!mini">
             
             <div class="font-weight-medium">Farmaceutico</div>
-            <div class="text-caption text-grey">Sucursal</div>
+            <div class="text-caption text-primary">{{ nombreFarmaceutico }}</div>
           </div>
           
           <v-spacer></v-spacer>
@@ -145,8 +151,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
 
 const router = useRouter();
 const route = useRoute();
@@ -161,64 +168,38 @@ const drawerWidth = computed(() => mini.value ? 64 : 256);
 // Ruta actual
 const currentRoute = computed(() => route.path);
 
+// Nombre del farmacéutico
+const nombreFarmaceutico = ref('');
+
+
 // Menú items
-const menuItems = [
-    {
-    title: 'Dashboard',
-    icon: 'mdi-view-dashboard',
-    to: '/'
-    },
+// Volver atrás
+const principalItems = [
   {
-    title: 'Medicamentos',
+    title: 'Volver atrás',
+    icon: 'mdi-keyboard-return',
+    to: '/'
+  },
+];
+
+// recetas items
+const recetasItems = [
+  {
+    title: 'Entregar Medicamento',
+    icon: 'mdi-clipboard-pulse-outline',
+    to: '/retiro'
+  },  
+  {
+    title: 'Stock Medicamentos',
     icon: 'mdi-pill',
     to: '/medicamentos'
   },
   {
-    title: 'Ver Receta',
-    icon: 'mdi-clipboard-pulse-outline',
-    to: '/retiro'
-  }//,
-//   {
-//     title: 'Ventas',
-//     icon: 'mdi-cart',
-//     to: '/ventas',
-//     badge: '5',
-//     badgeColor: 'info'
-//   },
-//   {
-//     title: 'Compras',
-//     icon: 'mdi-cart-plus',
-//     to: '/compras'
-//   },
-//   {
-//     title: 'Clientes',
-//     icon: 'mdi-account-group',
-//     to: '/clientes'
-//   },
-//   {
-//     title: 'Proveedores',
-//     icon: 'mdi-truck',
-//     to: '/proveedores'
-//   }
-];
-
-// Reportes items
-const reportItems = [
-//   {
-//     title: 'Reportes de Ventas',
-//     icon: 'mdi-chart-line',
-//     to: '/reportes/ventas'
-//   },
-//   {
-//     title: 'Análisis de Inventario',
-//     icon: 'mdi-chart-bar',
-//     to: '/reportes/inventario'
-//   },
-//   {
-//     title: 'Finanzas',
-//     icon: 'mdi-currency-usd',
-//     to: '/reportes/finanzas'
-//   }
+    title: 'Solicitar Stock',
+    icon: 'mdi-truck',
+    to: '/solicitar-stock',
+    disabled: true
+  },
 ];
 
 // Métodos
@@ -229,6 +210,17 @@ const toggleMini = () => {
 const navigate = (path) => {
   router.push(path);
 };
+
+// Nombre del farmacéutico
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/farmaceutico/id/1');
+    const persona = response.data.persona;
+    nombreFarmaceutico.value = `${persona.nombre} ${persona.apellido}`;
+  } catch (error) {
+    console.error('Error al obtener el nombre del farmacéutico:', error);
+  }
+});
 </script>
 
 <style scoped>
@@ -248,7 +240,6 @@ const navigate = (path) => {
   height: 64px;
   border-bottom: 1px solid rgba(5, 5, 5, 0);
 }
-
 
 .menu-items {
   display: flex;
@@ -302,5 +293,11 @@ const navigate = (path) => {
 
 .mini-sidebar .menu-icon {
   margin: 0;
+}
+
+.disabled-item {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
 }
 </style>

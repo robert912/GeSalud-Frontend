@@ -3,6 +3,7 @@
         <v-row justify="center" align="center">
             <v-col cols="12" md="8" lg="6" class="text-center">
                 <v-card class="pa-6" elevation="12" rounded="xl">
+                    <!--v-img src="" class="mb-4" contain max-height="150" max-width="300"></v-img-->
                     <v-card-title class="text-h3 mb-6">
                         Bienvenido al Sistema Salud
                     </v-card-title>
