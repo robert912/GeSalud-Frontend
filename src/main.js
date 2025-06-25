@@ -8,7 +8,7 @@ import 'vuetify/styles';
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-import {aliases, mdi} from 'vuetify/iconsets/mdi';
+import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import '@mdi/font/css/materialdesignicons.css';
 
 //Configuracion de vuetify
@@ -23,10 +23,10 @@ const vuetify = createVuetify({
     },
   },
   theme: {
-    defaultTheme: 'light',
+    defaultTheme: 'light', // puedes cambiar dinámicamente si quieres
     themes: {
       light: {
-        dark: false,
+        dark: true,
         colors: {
           primary: '#1976D2',
           secondary: '#424242',
@@ -37,7 +37,21 @@ const vuetify = createVuetify({
           warning: '#FFC107',
         }
       },
-    },
+      dark: {
+        dark: false,
+        colors: {
+          primary: '#90CAF9',
+          secondary: '#424242',
+          accent: '#FF4081',
+          error: '#EF5350',
+          info: '#2196F3',
+          success: '#66BB6A',
+          warning: '#FFA726',
+          background: '#121212',
+          surface: '#1E1E1E'
+        }
+      }
+    }
   },
   defaults: {
     VCard: {

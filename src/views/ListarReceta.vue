@@ -3,7 +3,7 @@
     <SidebarMedico />
 
     <!-- Main Content -->
-    <v-main class="bg-grey-lighten-5">
+    <v-main class="">
       <v-container fluid class="pa-6">
         <!-- Header -->
         <div class="d-flex justify-space-between align-center mb-6">
