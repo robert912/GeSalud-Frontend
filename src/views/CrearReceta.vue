@@ -30,7 +30,7 @@
                     @keyup.enter="buscarPaciente"
                   />
                 </v-col>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="4" class ="pb-5 pt-0">
                   <v-btn
                     color="primary"
                     block
@@ -242,6 +242,7 @@ import { ref, onMounted } from 'vue'
 import { computed } from 'vue'
 import axios from 'axios'
 import SidebarMedico from '@/components/SidebarMedico.vue'
+import { BASE_API_URL, ID_MEDICO } from '@/constants/globals'
 
 // Estado
 const rutPaciente = ref('')
@@ -285,7 +286,7 @@ const buscarPaciente = async () => {
   error.value = ''
 
   try {
-    const { data } = await axios.get(`http://localhost:8080/paciente/${rutPaciente.value}`)
+    const { data } = await axios.get(`${BASE_API_URL}/paciente/${rutPaciente.value}`)
     paciente.value = data
   } catch (err) {
     paciente.value = null
@@ -297,7 +298,7 @@ const buscarPaciente = async () => {
 
 const cargarMedicamentos = async () => {
   try {
-    const { data } = await axios.get('http://localhost:8080/medicamento')
+    const { data } = await axios.get(`${BASE_API_URL}/medicamento`)
     medicamentos.value = data.filter(m => m.activo)
   } catch (e) {
     console.error('Error cargando medicamentos:', e)
@@ -369,10 +370,10 @@ const guardarReceta = async () => {
     // 1. Guardar receta
     const recetaPayload = {
       paciente: paciente.value.id,
-      medico: 1 // Reemplazar con ID del médico logueado
+      medico: ID_MEDICO
     }
 
-    const recetaRes = await axios.post('http://localhost:8080/receta', recetaPayload)
+    const recetaRes = await axios.post(`${BASE_API_URL}/receta`, recetaPayload)
     const recetaId = recetaRes.data.id
 
     // 2. Guardar detalles de receta
@@ -386,7 +387,7 @@ const guardarReceta = async () => {
         duracion: detalle.duracion
       }
 
-      await axios.post('http://localhost:8080/detalle', detallePayload)
+      await axios.post(`${BASE_API_URL}/detalle`, detallePayload)
     }
 
     // 3. Limpiar y notificar

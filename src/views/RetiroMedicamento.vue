@@ -28,9 +28,9 @@
                     @keyup.enter="buscarPaciente"
                   />
                 </v-col>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="4" class ="pb-5 pt-0">
                   <v-btn 
-                    color="primary" 
+                    color="primary"
                     block 
                     size="large"
                     @click="buscarPaciente"
@@ -79,7 +79,7 @@
                   <v-chip :color="receta.disponible ? 'success' : 'grey'" size="small">
                     {{ receta.disponible ? 'Disponible' : 'Entregada' }}
                   </v-chip>
-                  <span>Receta #{{ receta.id }} - {{ formatFecha(receta.fechaCreacion) }}</span>
+                  <span>Receta #{{ receta.id }} - <strong>Medico:</strong> {{ receta.medico.persona.nombre }}  {{ receta.medico.persona.apellido }} - {{ formatFecha(receta.fechaCreacion) }}</span>
                 </div>
               </v-expansion-panel-title>
               <v-expansion-panel-text>
@@ -155,6 +155,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import SidebarFarmaceutico from '@/components/SidebarFarmaceutico.vue'
+import { BASE_API_URL, ID_FARMACEUTICO } from '@/constants/globals'
 
 // Estado
 const rutPaciente = ref('')
@@ -193,7 +194,7 @@ const buscarPaciente = async () => {
 
   try {
     // Buscar paciente y recetas
-    const response = await axios.get(`http://localhost:8080/receta/${rutPaciente.value}`)
+    const response = await axios.get(`${BASE_API_URL}/receta/${rutPaciente.value}`)
     recetas.value = response.data.filter(r => r.disponible)
     
     if (recetas.value.length > 0) {
@@ -212,7 +213,7 @@ const buscarPaciente = async () => {
 
 const cargarDetallesReceta = async (recetaId) => {
   try {
-    const response = await axios.get(`http://localhost:8080/detalle/receta/${recetaId}`)
+    const response = await axios.get(`${BASE_API_URL}/detalle/receta/${recetaId}`)
     detallesReceta.value[recetaId] = response.data.map(d => ({
       ...d,
       entregando: false
@@ -228,19 +229,19 @@ const entregarMedicamento = async (detalle, recetaId) => {
   
   try {
     // 1. Desactivar el detalle
-    await axios.put(`http://localhost:8080/detalle/desactivar/${detalle.id}`)
+    await axios.put(`${BASE_API_URL}/detalle/desactivar/${detalle.id}`)
     
     // 2. Bajar el stock en 1
     const nuevoStock = detalle.medicamento.stock - 1;
-    await axios.put(`http://localhost:8080/medicamento/${detalle.medicamento.id}`, {
+    await axios.put(`${BASE_API_URL}/medicamento/${detalle.medicamento.id}`, {
       ...detalle.medicamento,
       stock: nuevoStock,
     });
 
     // 3. Registrar el retiro
-    await axios.post(`http://localhost:8080/retiro`, {
+    await axios.post(`${BASE_API_URL}/retiro`, {
       detalleReceta: detalle.id,
-      farmaceutico: 1
+      farmaceutico: ID_FARMACEUTICO
     })
     
     // 4. Actualizar lista de detalles
@@ -249,7 +250,7 @@ const entregarMedicamento = async (detalle, recetaId) => {
     // 5. Verificar si todos los detalles están entregados
     const todosEntregados = detallesReceta.value[recetaId].every(d => !d.activo)
     if (todosEntregados) {
-      await axios.put(`http://localhost:8080/receta/bloquear/${recetaId}`)
+      await axios.put(`${BASE_API_URL}/receta/bloquear/${recetaId}`)
       // Actualizar estado de la receta
       const recetaIndex = recetas.value.findIndex(r => r.id === recetaId)
       if (recetaIndex !== -1) {

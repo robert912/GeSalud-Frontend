@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import RetiroMedicamento from "@/views/RetiroMedicamento.vue";
 import SeleccionRol from "@/views/SeleccionRol.vue";
 import CrearReceta from "@/views/CrearReceta.vue";
-import BuscarReceta from "@/views/BuscarReceta.vue";
+import ListarReceta from "@/views/ListarReceta.vue";
 import Medicamentos from "@/views/Medicamentos.vue";
 import NotFound from "@/views/NotFound.vue";
 
@@ -39,8 +39,8 @@ const routes = [
     },
     {
         path: '/buscar-receta',
-        name: 'BuscarReceta',
-        component: BuscarReceta,
+        name: 'ListarReceta',
+        component: ListarReceta,
         meta: {
             title: 'Buscar Receta Médica'
         }
