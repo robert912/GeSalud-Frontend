@@ -112,7 +112,7 @@
                     <v-col cols="12" md="9">
                       <v-autocomplete 
                         v-model="detalle.medicamento"
-                        :items="medicamentos"
+                        :items="medicamentos.filter(m => !medicamentosSeleccionados.includes(m.id) || m.id === detalle.medicamento?.id)"
                         item-title="nombre"
                         placeholder="Seleccionar Medicamento"
                         :rules="[rules.required]"
@@ -238,13 +238,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import SidebarMedico from '@/components/SidebarMedico.vue'
 import { BASE_API_URL, ID_MEDICO } from '@/constants/globals'
 
-// Estado
 const rutPaciente = ref('')
 const buscandoPaciente = ref(false)
 const paciente = ref(null)
@@ -253,6 +251,11 @@ const medicamentos = ref([])
 const panelAbierto = ref(null)
 const guardando = ref(false)
 const error = ref('')
+const medicamentosSeleccionados = computed(() => 
+  detalles.value
+    .map(d => d.medicamento?.id)
+    .filter(id => !!id)
+)
 const snackbar = ref({
   show: false,
   text: '',

@@ -29,7 +29,6 @@
         ></v-btn>
       </div>
       
-      <v-divider></v-divider>
       
       <!-- Menú principal -->
       <div class="pa-3">
@@ -315,15 +314,15 @@ const examenesItems = [
 // recetas items
 const recetasItems = [
   {
+    title: 'Historial Recetas',
+    icon: 'mdi-clipboard-pulse-outline',
+    to: '/listar-receta'
+  },
+  {
     title: 'Generar Receta',
     icon: 'mdi-pill-multiple',
     to: '/crear-receta'
-  },
-  {
-    title: 'Historial Recetas',
-    icon: 'mdi-clipboard-pulse-outline',
-    to: '/buscar-receta'
-  },
+  }
 ];
 
 // licencias items

@@ -23,7 +23,7 @@ const routes = [
     },
     {
         path: '/medico',
-        redirect: '/buscar-receta'
+        redirect: '/listar-receta'
     },
     {
         path: '/farmaceutico',
@@ -38,11 +38,11 @@ const routes = [
         }
     },
     {
-        path: '/buscar-receta',
+        path: '/listar-receta',
         name: 'ListarReceta',
         component: ListarReceta,
         meta: {
-            title: 'Buscar Receta Médica'
+            title: 'Listar Receta Médica'
         }
     },
     {

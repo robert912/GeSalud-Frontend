@@ -29,7 +29,6 @@
         ></v-btn>
       </div>
       
-      <v-divider></v-divider>
       
       <!-- Menú principal -->
       <div class="pa-3">

@@ -88,14 +88,14 @@
                                 </div>
                             </template>
 
-			    <template v-for="header in headers" :key="header.key" v-slot:[`header.${header.key}`]>
-		                    <v-tooltip location="top">
-		                        <template #activator="{ props }">
-		                        <span v-bind="props">{{ header.title }}</span>
-		                        </template>
-		                        <span>{{ header.description }}</span>
-		                    </v-tooltip>
-                            </template> 
+                            <template v-for="header in headers" :key="header.key" v-slot:[`header.${header.key}`]>
+                                <v-tooltip location="top">
+                                    <template #activator="{ props }">
+                                        <span v-bind="props">{{ header.title }}</span>
+                                    </template>
+                                    <span>{{ header.description }}</span>
+                                </v-tooltip>
+                            </template>
 
                             <!-- Empty State -->
                             <template v-slot:no-data>
@@ -131,45 +131,50 @@
                             <v-row>
                                 <v-col cols="12" md="6">
                                     <v-text-field v-model="medicamentoActual.nombre" placeholder="Medicamento"
-                                        label="Nombre del medicamento" required
+                                        label="Nombre del medicamento" hint="Ej: Paracetamol, Ibuprofeno"
+                                        persistent-hint required
                                         :rules="[v => !!v || 'El nombre es requerido']"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
                                     <v-text-field v-model="medicamentoActual.uso"
-                                        placeholder="Inflamación, Fiebre, Alergia" label="Uso" required
-                                        :rules="[v => !!v || 'El uso es requerido']"></v-text-field>
+                                        placeholder="Inflamación, Fiebre, Alergia" label="Uso"
+                                        hint="Uso terapéutico, ej: Analgésico, Antiinflamatorio" persistent-hint
+                                        required :rules="[v => !!v || 'El uso es requerido']"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
                                     <v-select v-model="medicamentoActual.controlado" :items="[
                                         { text: 'Sí', value: true },
                                         { text: 'No', value: false }
-                                    ]" item-title="text" item-value="value" label="¿Es controlado?" required
+                                    ]" item-title="text" item-value="value" label="¿Es controlado?"
+                                        hint="Indica si requiere receta retenida" persistent-hint required
                                         :rules="[v => v !== null || 'Este campo es requerido']"></v-select>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
                                     <v-text-field v-model="medicamentoActual.presentacion"
-                                        placeholder="Comprimidos, Jarabe, Capsulas" label="Presentación" required
+                                        placeholder="Comprimidos, Jarabe, Capsulas" label="Presentación"
+                                        hint="Ej: Caja x 10 comprimidos, Frasco de 120 ml" persistent-hint required
                                         :rules="[v => !!v || 'La presentación es requerida']"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
                                     <v-text-field v-model="medicamentoActual.dosis"
-                                        placeholder="1 Comprimido, 1 Capsula" label="Dosis" required
+                                        placeholder="1 Comprimido, 1 Capsula" label="Dosis"
+                                        hint="Ej: 1 comprimido cada 8 horas" persistent-hint required
                                         :rules="[v => !!v || 'La dosis es requerida']"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
                                     <v-text-field v-model="medicamentoActual.concentracion" placeholder="500 mg"
-                                        label="Concentración"
+                                        label="Concentración" hint="Ej: 500 mg, 5 mg/ml" persistent-hint
                                         :rules="[v => !!v || 'La concentración es requerida']"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
                                     <v-text-field v-model.number="medicamentoActual.stock" label="Stock" type="number"
-                                        required :rules="[
+                                        hint="Cantidad en inventario (ej: 50 unidades)" persistent-hint required :rules="[
                                             v => v !== null || 'El stock es requerido',
                                             v => v >= 0 || 'El stock no puede ser negativo'
                                         ]"></v-text-field>
@@ -177,7 +182,7 @@
 
                                 <v-col cols="12" md="6">
                                     <v-text-field v-model.number="medicamentoActual.valor" label="Valor" type="number"
-                                        prefix="$" required :rules="[
+                                        prefix="$" hint="Precio unitario (ej: $1500)" persistent-hint required :rules="[
                                             v => v !== null || 'El valor es requerido',
                                             v => v >= 0 || 'El valor no puede ser negativo'
                                         ]"></v-text-field>
@@ -185,21 +190,27 @@
 
                                 <v-col cols="12" md="6">
                                     <v-text-field v-model="medicamentoActual.frecuencia" placeholder="Cada 8 horas.."
-                                        label="Frecuencia"></v-text-field>
+                                        label="Frecuencia" hint="Frecuencia de administración, ej: Cada 12 horas"
+                                        persistent-hint></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="6">
                                     <v-text-field v-model="medicamentoActual.duracion" placeholder="5 días"
-                                        label="Duración"></v-text-field>
+                                        label="Duración" hint="Duración del tratamiento, ej: 5 días"
+                                        persistent-hint></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12">
                                     <v-textarea v-model="medicamentoActual.indicaciones"
-                                        placeholder="Tomar en ayunas..." label="Indicaciones" rows="3"></v-textarea>
+                                        placeholder="Tomar en ayunas..." label="Indicaciones"
+                                        hint="Instrucciones adicionales para el paciente" persistent-hint
+                                        rows="3"></v-textarea>
                                 </v-col>
 
                                 <!--v-col cols="12">
                                     <v-switch v-model="medicamentoActual.activo" label="Activo"
+                                        hint="Indica si el medicamento está disponible"
+                                        persistent-hint
                                         color="primary"></v-switch>
                                 </v-col-->
                             </v-row>
@@ -395,16 +406,16 @@ import SidebarFarmaceutico from '@/components/SidebarFarmaceutico.vue';
 
 // Table headers
 const headers = [
-  { title: 'ID', key: 'id', description: 'Identificador único del medicamento', sortable: true },
-  { title: 'Nombre', key: 'nombre', description: 'Nombre comercial del medicamento', sortable: true },
-  { title: 'Uso', key: 'uso', description: 'Uso terapéutico del medicamento', sortable: true },
-  { title: 'Tipo', key: 'controlado', description: 'Indica si el medicamento es controlado', sortable: true, align: 'center' },
-  { title: 'Presentación', key: 'presentacion', description: 'Forma en que se presenta el medicamento', sortable: true },
-  { title: 'Dosis', key: 'dosis', description: 'Cantidad a administrar', sortable: false },
-  { title: 'Concentración', key: 'concentracion', description: 'Concentración del principio activo', sortable: false },
-  { title: 'Stock', key: 'stock', description: 'Cantidad disponible en inventario', sortable: true, align: 'center' },
-  { title: 'Valor', key: 'valor', description: 'Precio unitario del medicamento', sortable: true, align: 'end' },
-  { title: 'Acciones', key: 'actions', description: 'Editar, eliminar o ver detalles', sortable: false, align: 'center' }
+    { title: 'ID', key: 'id', description: 'Identificador único del medicamento', sortable: true },
+    { title: 'Nombre', key: 'nombre', description: 'Nombre comercial del medicamento', sortable: true },
+    { title: 'Uso', key: 'uso', description: 'Uso terapéutico del medicamento', sortable: true },
+    { title: 'Tipo', key: 'controlado', description: 'Indica si el medicamento es controlado', sortable: true, align: 'center' },
+    { title: 'Presentación', key: 'presentacion', description: 'Forma en que se presenta el medicamento', sortable: true },
+    { title: 'Dosis', key: 'dosis', description: 'Cantidad a administrar', sortable: false },
+    { title: 'Concentración', key: 'concentracion', description: 'Concentración del principio activo', sortable: false },
+    { title: 'Stock', key: 'stock', description: 'Cantidad disponible en inventario', sortable: true, align: 'center' },
+    { title: 'Valor', key: 'valor', description: 'Precio unitario del medicamento', sortable: true, align: 'end' },
+    { title: 'Acciones', key: 'actions', description: 'Editar, eliminar o ver detalles', sortable: false, align: 'center' }
 ];
 
 // Estado
