@@ -195,7 +195,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
-import { BASE_API_URL, ID_MEDICO } from '@/constants/globals'
+import { ID_MEDICO } from '@/constants/globals'
 import { useTheme } from 'vuetify'
 
 const router = useRouter();
@@ -318,7 +318,7 @@ const navigate = (path) => {
 // Nombre del médico
 onMounted(async () => {
   try {
-    const response = await axios.get(`${BASE_API_URL}/medico/id/${ID_MEDICO}`);
+    const response = await axios.get(`/medico/id/${ID_MEDICO}`);
     const persona = response.data.persona;
     nombreMedico.value = `${persona.nombre} ${persona.apellido}`;
   } catch (error) {

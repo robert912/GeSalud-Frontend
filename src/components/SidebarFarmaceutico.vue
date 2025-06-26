@@ -122,7 +122,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
-import { BASE_API_URL, ID_FARMACEUTICO } from '@/constants/globals'
+import { ID_FARMACEUTICO } from '@/constants/globals'
 import { useTheme } from 'vuetify'
 
 const router = useRouter();
@@ -196,7 +196,7 @@ const navigate = (path) => {
 // Nombre del farmacéutico
 onMounted(async () => {
   try {
-    const response = await axios.get(`${BASE_API_URL}/farmaceutico/id/${ID_FARMACEUTICO}`);
+    const response = await axios.get(`/farmaceutico/id/${ID_FARMACEUTICO}`);
     const persona = response.data.persona;
     nombreFarmaceutico.value = `${persona.nombre} ${persona.apellido}`;
   } catch (error) {

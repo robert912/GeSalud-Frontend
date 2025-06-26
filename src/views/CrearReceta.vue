@@ -240,7 +240,7 @@
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import SidebarMedico from '@/components/SidebarMedico.vue'
-import { BASE_API_URL, ID_MEDICO } from '@/constants/globals'
+import { ID_MEDICO } from '@/constants/globals'
 
 const rutPaciente = ref('')
 const buscandoPaciente = ref(false)
@@ -288,7 +288,7 @@ const buscarPaciente = async () => {
   error.value = ''
 
   try {
-    const { data } = await axios.get(`${BASE_API_URL}/paciente/${rutPaciente.value}`)
+    const { data } = await axios.get(`/paciente/${rutPaciente.value}`)
     paciente.value = data
   } catch (err) {
     paciente.value = null
@@ -300,7 +300,7 @@ const buscarPaciente = async () => {
 
 const cargarMedicamentos = async () => {
   try {
-    const { data } = await axios.get(`${BASE_API_URL}/medicamento`)
+    const { data } = await axios.get(`/medicamento`)
     medicamentos.value = data.filter(m => m.activo)
   } catch (e) {
     console.error('Error cargando medicamentos:', e)
@@ -375,7 +375,7 @@ const guardarReceta = async () => {
       medico: ID_MEDICO
     }
 
-    const recetaRes = await axios.post(`${BASE_API_URL}/receta`, recetaPayload)
+    const recetaRes = await axios.post(`/receta`, recetaPayload)
     const recetaId = recetaRes.data.id
 
     // 2. Guardar detalles de receta
@@ -389,7 +389,7 @@ const guardarReceta = async () => {
         duracion: detalle.duracion
       }
 
-      await axios.post(`${BASE_API_URL}/detalle`, detallePayload)
+      await axios.post(`/detalle`, detallePayload)
     }
 
     // 3. Limpiar y notificar

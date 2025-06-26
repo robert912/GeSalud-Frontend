@@ -219,7 +219,7 @@
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import SidebarMedico from '@/components/SidebarMedico.vue'
-import { BASE_API_URL, ID_MEDICO } from '@/constants/globals'
+import { ID_MEDICO } from '@/constants/globals'
 
 const recetas = ref([])
 const recetasOriginal = ref([])
@@ -256,7 +256,7 @@ const formatDateTime = (fecha) => {
 
 const cargarRecetas = async () => {
   try {
-    const { data } = await axios.get(`${BASE_API_URL}/receta/medico/${ID_MEDICO}`)
+    const { data } = await axios.get(`/receta/medico/${ID_MEDICO}`)
     recetas.value = data
     recetasOriginal.value = data
   } catch (err) {
@@ -299,7 +299,7 @@ const filtrarEstado = () => {
 
 const verDetalles = async (recetaId) => {
   try {
-    const { data } = await axios.get(`${BASE_API_URL}/detalle/receta/${recetaId}`)
+    const { data } = await axios.get(`/detalle/receta/${recetaId}`)
     detallesReceta.value = data
     recetaSeleccionada.value = recetas.value.find(r => r.id === recetaId)
     dialogoDetalle.value = true

@@ -155,7 +155,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import SidebarFarmaceutico from '@/components/SidebarFarmaceutico.vue'
-import { BASE_API_URL, ID_FARMACEUTICO } from '@/constants/globals'
+import { ID_FARMACEUTICO } from '@/constants/globals'
 
 // Estado
 const rutPaciente = ref('')
@@ -194,7 +194,7 @@ const buscarPaciente = async () => {
 
   try {
     // Buscar paciente y recetas
-    const response = await axios.get(`${BASE_API_URL}/receta/${rutPaciente.value}`)
+    const response = await axios.get(`/receta/${rutPaciente.value}`)
     recetas.value = response.data.filter(r => r.disponible)
     
     if (recetas.value.length > 0) {
@@ -213,7 +213,7 @@ const buscarPaciente = async () => {
 
 const cargarDetallesReceta = async (recetaId) => {
   try {
-    const response = await axios.get(`${BASE_API_URL}/detalle/receta/${recetaId}`)
+    const response = await axios.get(`/detalle/receta/${recetaId}`)
     detallesReceta.value[recetaId] = response.data.map(d => ({
       ...d,
       entregando: false
@@ -229,17 +229,17 @@ const entregarMedicamento = async (detalle, recetaId) => {
   
   try {
     // 1. Desactivar el detalle
-    await axios.put(`${BASE_API_URL}/detalle/desactivar/${detalle.id}`)
+    await axios.put(`/detalle/desactivar/${detalle.id}`)
     
     // 2. Bajar el stock en 1
     const nuevoStock = detalle.medicamento.stock - 1;
-    await axios.put(`${BASE_API_URL}/medicamento/${detalle.medicamento.id}`, {
+    await axios.put(`/medicamento/${detalle.medicamento.id}`, {
       ...detalle.medicamento,
       stock: nuevoStock,
     });
 
     // 3. Registrar el retiro
-    await axios.post(`${BASE_API_URL}/retiro`, {
+    await axios.post(`/retiro`, {
       detalleReceta: detalle.id,
       farmaceutico: ID_FARMACEUTICO
     })
@@ -250,7 +250,7 @@ const entregarMedicamento = async (detalle, recetaId) => {
     // 5. Verificar si todos los detalles están entregados
     const todosEntregados = detallesReceta.value[recetaId].every(d => !d.activo)
     if (todosEntregados) {
-      await axios.put(`${BASE_API_URL}/receta/bloquear/${recetaId}`)
+      await axios.put(`/receta/bloquear/${recetaId}`)
       // Actualizar estado de la receta
       const recetaIndex = recetas.value.findIndex(r => r.id === recetaId)
       if (recetaIndex !== -1) {
