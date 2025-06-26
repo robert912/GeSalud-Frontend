@@ -94,7 +94,7 @@
               <v-expansion-panel-title expand-icon="mdi-chevron-down">
                 <div class="d-flex align-center gap-4">
                   <v-chip 
-                    :color="detalle.medicamento ? 'primary' : 'grey'" 
+                    :color="detalle.medicamento ? 'primary' : 'used'" 
                     variant="outlined" 
                     size="small"
                   >
@@ -202,7 +202,7 @@
           <div class="d-flex justify-end gap-4 mt-6">
             <v-btn 
               variant="tonal" 
-              color="grey-darken-2"
+              color="grey-darken-6"
               @click="resetearFormulario"
             >
               Limpiar Formulario

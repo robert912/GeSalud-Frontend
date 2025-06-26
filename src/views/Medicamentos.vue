@@ -120,7 +120,7 @@
         <!-- Create/Edit Medicamento Dialog -->
         <v-dialog v-model="dialogs.medicamento" max-width="800px" persistent>
             <v-card>
-                <v-toolbar :color="modoEdicion ? 'primary' : 'primary'"
+                <v-toolbar :color="'barnav'"
                     :title="modoEdicion ? 'Editar Medicamento' : 'Nuevo Medicamento'">
                     <v-btn icon="mdi-close" variant="text" @click="dialogs.medicamento = false"></v-btn>
                 </v-toolbar>
@@ -257,7 +257,7 @@
         <!-- View Medicamento Details Dialog -->
         <v-dialog v-model="dialogs.view" max-width="700px">
             <v-card v-if="medicamentoDetalle" rounded="lg">
-                <v-toolbar color="info" density="compact" :title="medicamentoDetalle.nombre">
+                <v-toolbar color="barnav" density="compact" :title="medicamentoDetalle.nombre">
                     <v-btn icon="mdi-close" variant="text" @click="dialogs.view = false"></v-btn>
                 </v-toolbar>
 
@@ -661,7 +661,6 @@ onMounted(() => {
 
 <style scoped>
 .v-data-table :deep(th) {
-    background-color: #f5f5f5 !important;
     font-weight: 600 !important;
 }
 

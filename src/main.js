@@ -11,6 +11,7 @@ import * as directives from "vuetify/directives";
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import '@mdi/font/css/materialdesignicons.css';
 
+const temaGuardado = localStorage.getItem('tema') || 'light'
 //Configuracion de vuetify
 const vuetify = createVuetify({
     components,
@@ -23,38 +24,42 @@ const vuetify = createVuetify({
         },
     },
     theme: {
-        defaultTheme: 'light',
-        themes: {
-            light: {
-                dark: false,
-                colors: {
-                    primary: '#1976D2',
-                    secondary: '#424242',
-                    accent: '#82B1FF',
-                    error: '#FF5252',
-                    info: '#2196F3',
-                    success: '#4CAF50',
-                    warning: '#FFC107',
-                    background: '#e3f2fd',
-                    surface: '#ffffff'
-                }
-            },
-            dark: {
-                dark: false,
-                colors: {
-                    primary: '#90CAF9',
-                    secondary: '#424242',
-                    accent: '#FF4081',
-                    error: '#EF5350',
-                    info: '#2196F3',
-                    success: '#66BB6A',
-                    warning: '#FFA726',
-                    background: '#121212',
-                    surface: '#1E1E1E'
-                }
-            }
-        }
+  defaultTheme: temaGuardado, // puedes cambiar dinámicamente si quieres
+  themes: {
+    light: {
+      dark: false,
+      colors: {
+        primary: '#1976D2',
+        secondary: '#424242',
+        accent: '#82B1FF',
+        error: '#FF5252',
+        info: '#2196F3',
+        success: '#4CAF50',
+        warning: '#FFC107',
+        used:'#424242',
+        barnav: '#1976D2',
+        background: '#e3f2fd',
+        surface: '#ffffff'
+      }
     },
+    dark: {
+      dark: false,
+      colors: {
+        primary: '#90CAF9',
+        secondary: '#424242',
+        accent: '#FF4081',
+        error: '#EF5350',
+        info: '#2196F3',
+        success: '#66BB6A',
+        warning: '#FFA726',
+        barnav: '#234a56',
+        used:'#E0E0E0',
+        background: '#121212',
+        surface: '#1E1E1E'
+      }
+    }
+  }
+},
     defaults: {
         VCard: {
             rounded: 'lg',

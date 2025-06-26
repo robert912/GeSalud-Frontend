@@ -1,99 +1,90 @@
-
 <template>
   <div>
-    <v-navigation-drawer
-      v-model="drawer"
-      :width="drawerWidth"
-      permanent
-      class="simple-sidebar"
-      :class="{ 'mini-sidebar': mini }"
-      elevation="5"
-    >
+    <v-navigation-drawer v-model="drawer" :width="drawerWidth" permanent class="simple-sidebar"
+      :class="{ 'mini-sidebar': mini }" elevation="5">
       <!-- Logo y título -->
       <div class="sidebar-header pa-4 d-flex align-center">
-        
         <div class="app-title ml-3" v-show="!mini">
-          <h1 >GeSalud</h1>
+          <div class="d-flex align-center">
+            <h1 class="mr-2">GeSalud</h1>
+
+            <!-- Icono de cambio de tema -->
+            <v-row class="align-center pl-10" style="position: relative; height: 32px; width: 32px;">
+              <template v-if="ready">
+                <v-fade-transition>
+                  <v-icon v-if="!isDark" key="light" color="info" class="cursor-pointer"
+                    style="position: absolute; font-size: 20px;" @click="isDark = true">
+                    mdi-weather-night
+                  </v-icon>
+                </v-fade-transition>
+
+                <v-fade-transition>
+                  <v-icon v-if="isDark" key="dark" color="warning" class="cursor-pointer"
+                    style="position: absolute; font-size: 20px;" @click="isDark = false">
+                    mdi-weather-sunny
+                  </v-icon>
+                </v-fade-transition>
+              </template>
+            </v-row>
+          </div>
+
           <span class="text-caption text-grey">Sistema de Gestión de Salud</span>
         </div>
-        
+
         <v-spacer></v-spacer>
-        
-        <v-btn
-          icon="mdi-chevron-left"
-          variant="text"
-          size="medium"
-          color="black"
-          @click="toggleMini"
-          :class="{ 'rotate-180': mini }"
-        ></v-btn>
+
+        <v-btn icon="mdi-chevron-left" variant="text" size="medium" color="black" @click="toggleMini"
+          :class="{ 'rotate-180': mini }"></v-btn>
       </div>
-      
-      
+
+
       <!-- Menú principal -->
       <div class="pa-3">
         <div class="menu-items">
-          <div
-            v-for="(item, index) in principalItems"
-            :key="index"
-            class="menu-item d-flex align-center"
-            :class="{ active: item.to === currentRoute, 'justify-center': mini }"
-            @click="navigate(item.to)"
-          >
+          <div v-for="(item, index) in principalItems" :key="index" class="menu-item d-flex align-center"
+            :class="{ active: item.to === currentRoute, 'justify-center': mini }" @click="navigate(item.to)">
             <div class="menu-icon">
               <v-icon :icon="item.icon" :color="item.to === currentRoute ? 'primary' : 'grey-darken-1'"></v-icon>
             </div>
-            
+
             <div class="menu-title" v-show="!mini">
               {{ item.title }}
             </div>
-            
+
             <div class="menu-badge ml-auto" v-if="item.badge && !mini">
-              <v-chip
-                size="x-small"
-                :color="item.badgeColor || 'primary'"
-                class="font-weight-medium"
-              >
-                {{ item.badge }}
-              </v-chip>
-            </div>
-          </div>
-        </div>        
-
-        <v-divider class="my-3"></v-divider>
-
-      <div class="menu-section mb-2" v-show="!mini">
-        <div class="text-caption text-grey font-weight-bold px-3 py-2">PACIENTE</div>
-      </div>
-
-        <div class="menu-items">
-          <div
-            v-for="(item, index) in pacienteItems"
-            :key="index"
-            class="menu-item d-flex align-center"
-            :class="{ active: item.to === currentRoute, 'justify-center': mini, 'disabled-item': item.disabled }"
-            @click="navigate(item.to)"
-          >
-            <div class="menu-icon">
-              <v-icon :icon="item.icon" :color="item.to === currentRoute ? 'primary' : 'grey-darken-1'"></v-icon>
-            </div>
-            
-            <div class="menu-title" v-show="!mini">
-              {{ item.title }}
-            </div>
-            
-            <div class="menu-badge ml-auto" v-if="item.badge && !mini">
-              <v-chip
-                size="x-small"
-                :color="item.badgeColor || 'primary'"
-                class="font-weight-medium"
-              >
+              <v-chip size="x-small" :color="item.badgeColor || 'primary'" class="font-weight-medium">
                 {{ item.badge }}
               </v-chip>
             </div>
           </div>
         </div>
-  
+
+        <v-divider class="my-3"></v-divider>
+
+        <div class="menu-section mb-2" v-show="!mini">
+          <div class="text-caption text-grey font-weight-bold px-3 py-2">PACIENTE</div>
+        </div>
+
+        <div class="menu-items">
+          <div v-for="(item, index) in pacienteItems" :key="index" class="menu-item d-flex align-center"
+            :class="{ active: item.to === currentRoute, 'justify-center': mini, 'disabled-item': item.disabled }"
+            @click="navigate(item.to)">
+            <div class="menu-icon">
+              <v-icon :icon="item.icon" :color="item.to === currentRoute ? 'primary' : 'grey-darken-1'"></v-icon>
+            </div>
+
+            <div class="menu-title" v-show="!mini">
+              {{ item.title }}
+            </div>
+
+            <div class="menu-badge ml-auto" v-if="item.badge && !mini">
+              <v-chip size="x-small" :color="item.badgeColor || 'primary'" class="font-weight-medium">
+                {{ item.badge }}
+              </v-chip>
+            </div>
+          </div>
+        </div>
+
         <v-divider class="my-3"></v-divider>
 
         <div class="menu-section mb-2" v-show="!mini">
@@ -101,32 +92,24 @@
         </div>
 
         <div class="menu-items">
-          <div
-            v-for="(item, index) in recetasItems"
-            :key="index"
-            class="menu-item d-flex align-center"
+          <div v-for="(item, index) in recetasItems" :key="index" class="menu-item d-flex align-center"
             :class="{ active: item.to === currentRoute, 'justify-center': mini, 'disabled-item': item.disabled }"
-            @click="navigate(item.to)"
-          >
+            @click="navigate(item.to)">
             <div class="menu-icon">
               <v-icon :icon="item.icon" :color="item.to === currentRoute ? 'primary' : 'grey-darken-1'"></v-icon>
             </div>
-            
+
             <div class="menu-title" v-show="!mini">
               {{ item.title }}
             </div>
-            
+
             <div class="menu-badge ml-auto" v-if="item.badge && !mini">
-              <v-chip
-                size="x-small"
-                :color="item.badgeColor || 'primary'"
-                class="font-weight-medium"
-              >
+              <v-chip size="x-small" :color="item.badgeColor || 'primary'" class="font-weight-medium">
                 {{ item.badge }}
               </v-chip>
             </div>
           </div>
-        </div>        
+        </div>
 
         <v-divider class="my-3"></v-divider>
 
@@ -135,32 +118,24 @@
         </div>
 
         <div class="menu-items">
-          <div
-            v-for="(item, index) in examenesItems"
-            :key="index"
-            class="menu-item d-flex align-center"
+          <div v-for="(item, index) in examenesItems" :key="index" class="menu-item d-flex align-center"
             :class="{ active: item.to === currentRoute, 'justify-center': mini, 'disabled-item': item.disabled }"
-            @click="navigate(item.to)"
-          >
+            @click="navigate(item.to)">
             <div class="menu-icon">
               <v-icon :icon="item.icon" :color="item.to === currentRoute ? 'primary' : 'grey-darken-1'"></v-icon>
             </div>
-            
+
             <div class="menu-title" v-show="!mini">
               {{ item.title }}
             </div>
-            
+
             <div class="menu-badge ml-auto" v-if="item.badge && !mini">
-              <v-chip
-                size="x-small"
-                :color="item.badgeColor || 'primary'"
-                class="font-weight-medium"
-              >
+              <v-chip size="x-small" :color="item.badgeColor || 'primary'" class="font-weight-medium">
                 {{ item.badge }}
               </v-chip>
             </div>
           </div>
-        </div>        
+        </div>
 
         <v-divider class="my-3"></v-divider>
 
@@ -168,19 +143,15 @@
         <div class="menu-section mb-2" v-show="!mini">
           <div class="text-caption text-grey font-weight-bold px-3 py-2">LICENCIAS</div>
         </div>
-        
+
         <div class="menu-items">
-          <div
-            v-for="(item, index) in licenciaItems"
-            :key="index"
-            class="menu-item d-flex align-center"
+          <div v-for="(item, index) in licenciaItems" :key="index" class="menu-item d-flex align-center"
             :class="{ active: item.to === currentRoute, 'justify-center': mini, 'disabled-item': item.disabled }"
-            @click="navigate(item.to)"
-          >
+            @click="navigate(item.to)">
             <div class="menu-icon">
               <v-icon :icon="item.icon" :color="item.to === currentRoute ? 'primary' : 'grey-darken-1'"></v-icon>
             </div>
-            
+
             <div class="menu-title" v-show="!mini">
               {{ item.title }}
             </div>
@@ -193,46 +164,25 @@
         <v-divider></v-divider>
         <div class="pa-4 d-flex align-center">
           <v-avatar size="36">
-            <v-icon
-                    icon="mdi-doctor"
-                    size="36"
-                    color=""
-                    class=""
-            ></v-icon>
+            <v-icon icon="mdi-doctor" size="36" color="" class=""></v-icon>
           </v-avatar>
-          
+
           <div class="user-info ml-3" v-show="!mini">
             <div class="font-weight-medium">Médico</div>
             <div class="text-caption text-primary">{{ nombreMedico }}</div>
           </div>
-          
+
           <v-spacer></v-spacer>
-          
+
           <v-menu v-if="!mini" location="top">
             <template v-slot:activator="{ props }">
-              <v-btn
-                v-bind="props"
-                icon="mdi-dots-vertical"
-                variant="text"
-                size="small"
-                color="grey"
-              ></v-btn>
+              <v-btn v-bind="props" icon="mdi-dots-vertical" variant="text" size="small" color="grey"></v-btn>
             </template>
             <v-list density="compact">
-              <v-list-item
-                title="Mi perfil"
-                prepend-icon="mdi-account"
-              ></v-list-item>
-              <v-list-item
-                title="Configuración"
-                prepend-icon="mdi-cog"
-              ></v-list-item>
+              <v-list-item title="Mi perfil" prepend-icon="mdi-account"></v-list-item>
+              <v-list-item title="Configuración" prepend-icon="mdi-cog"></v-list-item>
               <v-divider class="my-1"></v-divider>
-              <v-list-item
-                title="Cerrar sesión"
-                prepend-icon="mdi-logout"
-                class="text-error"
-              ></v-list-item>
+              <v-list-item title="Cerrar sesión" prepend-icon="mdi-logout" class="text-error"></v-list-item>
             </v-list>
           </v-menu>
         </div>
@@ -242,10 +192,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 import { BASE_API_URL, ID_MEDICO } from '@/constants/globals'
+import { useTheme } from 'vuetify'
 
 const router = useRouter();
 const route = useRoute();
@@ -272,9 +223,23 @@ const principalItems = [
   },
 ];
 
+// Estado del tema
+const isDark = ref(false)
+const theme = useTheme()
+const ready = ref(false)
+onMounted(() => {
+  isDark.value = theme.global.name.value === 'dark'
+  requestAnimationFrame(() => {
+    ready.value = true
+  })
+})
+watch(isDark, (val) => {
+  theme.global.name.value = val ? 'dark' : 'light'
+})
+
 // Menú Pacientes
 const pacienteItems = [
-   {
+  {
     title: 'Antecedentes Paciente',
     icon: 'mdi-account',
     to: '/antecedentes-paciente',
@@ -286,7 +251,7 @@ const pacienteItems = [
     to: '/historial-atenciones',
     disabled: true
   },
-    {
+  {
     title: 'Alertas Paciente',
     icon: 'mdi-alert-circle',
     to: '/alertas-paciente',
@@ -364,7 +329,7 @@ onMounted(async () => {
 
 <style scoped>
 .simple-sidebar {
-  border-right: 1px solid rgba(0,0,0,0.12);
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
@@ -396,7 +361,7 @@ onMounted(async () => {
 }
 
 .menu-item:hover {
-  background-color: rgba(0,0,0,0.04);
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .menu-item.active {

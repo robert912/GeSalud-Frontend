@@ -64,7 +64,7 @@
               </template>
 
               <template v-slot:item.disponible="{ item }">
-                <v-chip :color="item.disponible ? 'success' : 'grey'" variant="tonal">
+                <v-chip :color="item.disponible ? 'success' : 'used'" variant="tonal">
                   {{ item.disponible ? 'Disponible' : 'Retirada' }}
                 </v-chip>
               </template>
@@ -94,7 +94,7 @@
 
         <v-dialog v-model="dialogoDetalle" max-width="800" width="80vw">
           <v-card style="max-height: 70vh; overflow: hidden;">
-            <v-toolbar color="primary" dark>
+            <v-toolbar color="barnav" dark>
               <v-toolbar-title>Detalle de Receta #{{ recetaSeleccionada?.id }}</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon @click="dialogoDetalle = false"><v-icon>mdi-close</v-icon></v-btn>
@@ -164,7 +164,7 @@
                     <v-list-item-content>
                       <v-list-item-title>Estado</v-list-item-title>
                       <v-list-item-subtitle>
-                        <v-chip :color="recetaSeleccionada?.disponible ? 'success' : 'secondary'" size="small">
+                        <v-chip :color="recetaSeleccionada?.disponible ? 'success' : 'used'" size="small">
                           {{ recetaSeleccionada?.disponible ? 'Disponible' : 'Retirada' }}
                         </v-chip>
                       </v-list-item-subtitle>
@@ -182,7 +182,7 @@
                   <v-list-item-content>
                     <v-list-item-title>
                       {{ detalle.medicamento.nombre }}
-                      <v-chip class="ml-2" size="x-small" :color="detalle.activo ? 'success' : 'secondary'">
+                      <v-chip class="ml-2" size="x-small" :color="detalle.activo ? 'success' : 'used'">
                         {{ detalle.activo ? 'Activa' : 'Retirada' }}
                       </v-chip>
                     </v-list-item-title>
@@ -313,7 +313,6 @@ onMounted(() => cargarRecetas())
 
 <style scoped>
 .v-data-table :deep(th) {
-  background-color: #f5f5f5 !important;
   font-weight: 600 !important;
 }
 </style>
