@@ -3,11 +3,10 @@
         <v-row justify="center" align="center">
             <v-col cols="12" md="8" lg="6" class="text-center">
                 <v-card class="pa-6" elevation="12" rounded="xl">
-                    <!--v-img src="" class="mb-4" contain max-height="150" max-width="300"></v-img-->
-                    <v-card-title class="text-h3 mb-6">
+                    <v-card-title class="text-h3 mb-2">
                         Bienvenido al Sistema Salud
                     </v-card-title>
-
+                    <v-img src="/public/gesalud.ico" class="mb-4 mx-auto d-block" contain max-height="150" max-width="300"></v-img>
                     <v-card-subtitle class="text-h6 mb-8">
                         Seleccione su rol para continuar
                     </v-card-subtitle>
@@ -41,7 +40,6 @@
 </template>
 
 <script setup>
-// No se necesita lógica adicional ya que los botones usan 'to' de vue-router
 </script>
 
 <style scoped>

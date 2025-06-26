@@ -15,7 +15,7 @@
         </div>
 
         <!-- Buscador de Paciente -->
-        <v-card class="mb-6" variant="outlined">
+        <v-card class="mb-6">
           <v-card-text>
             <v-form @submit.prevent="buscarPaciente">
               <v-row align="center">
@@ -45,7 +45,7 @@
         </v-card>
 
         <!-- Datos del Paciente -->
-        <v-card v-if="paciente" class="mb-6" variant="outlined">
+        <v-card v-if="paciente" class="mb-6">
           <v-card-title class="d-flex align-center">
             <v-icon color="primary" class="mr-2">mdi-account</v-icon>
             <span>Datos del Paciente</span>

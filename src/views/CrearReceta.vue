@@ -15,7 +15,7 @@
         </div>
 
         <!-- Buscador de Paciente -->
-        <v-card class="mb-6" variant="outlined" rounded="lg">
+        <v-card class="mb-6" rounded="lg">
           <v-card-text>
             <v-form @submit.prevent="buscarPaciente">
               <v-row align="center">
@@ -26,7 +26,6 @@
                     placeholder="Ej: 12345678-9"
                     :rules="[rules.required, rules.rut]"
                     prepend-inner-icon="mdi-magnify"
-                    variant="outlined"
                     @keyup.enter="buscarPaciente"
                   />
                 </v-col>
@@ -48,13 +47,13 @@
         </v-card>
 
         <!-- Datos del Paciente -->
-        <v-card v-if="paciente" class="mb-6" variant="outlined" rounded="lg">
+        <v-card v-if="paciente" class="mb-6" rounded="lg">
           <v-card-title class="d-flex align-center">
             <v-icon color="primary" class="mr-2">mdi-account-details</v-icon>
             <span class="text-h6">Datos del Paciente</span>
           </v-card-title>
           <v-card-text>
-            <v-list density="compact" class="bg-grey-lighten-4 rounded-lg">
+            <v-list density="compact" class="rounded-lg">
               <v-list-item>
                 <template v-slot:prepend><v-icon>mdi-account</v-icon></template>
                 <v-list-item-title class="font-weight-medium">{{ paciente.persona.nombre }} {{ paciente.persona.apellido }}</v-list-item-title>

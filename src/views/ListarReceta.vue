@@ -14,7 +14,7 @@
         </div>
 
         <!-- Filtros -->
-        <v-card class="mb-6" variant="outlined" rounded="lg">
+        <v-card class="mb-6" rounded="lg">
           <v-card-text>
             <v-row>
               <v-col cols="12" sm="6" md="4">

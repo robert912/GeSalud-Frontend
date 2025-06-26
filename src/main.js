@@ -13,69 +13,72 @@ import '@mdi/font/css/materialdesignicons.css';
 
 //Configuracion de vuetify
 const vuetify = createVuetify({
-  components,
-  directives,
-  icons: {
-    defaultSet: 'mdi',
-    aliases,
-    sets: {
-      mdi,
+    components,
+    directives,
+    icons: {
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+            mdi,
+        },
     },
-  },
-  theme: {
-    defaultTheme: 'light', // puedes cambiar dinámicamente si quieres
-    themes: {
-      light: {
-        dark: true,
-        colors: {
-          primary: '#1976D2',
-          secondary: '#424242',
-          accent: '#82B1FF',
-          error: '#FF5252',
-          info: '#2196F3',
-          success: '#4CAF50',
-          warning: '#FFC107',
+    theme: {
+        defaultTheme: 'light',
+        themes: {
+            light: {
+                dark: false,
+                colors: {
+                    primary: '#1976D2',
+                    secondary: '#424242',
+                    accent: '#82B1FF',
+                    error: '#FF5252',
+                    info: '#2196F3',
+                    success: '#4CAF50',
+                    warning: '#FFC107',
+                    background: '#e3f2fd',
+                    surface: '#ffffff'
+                }
+            },
+            dark: {
+                dark: false,
+                colors: {
+                    primary: '#90CAF9',
+                    secondary: '#424242',
+                    accent: '#FF4081',
+                    error: '#EF5350',
+                    info: '#2196F3',
+                    success: '#66BB6A',
+                    warning: '#FFA726',
+                    background: '#121212',
+                    surface: '#1E1E1E'
+                }
+            }
         }
-      },
-      dark: {
-        dark: false,
-        colors: {
-          primary: '#90CAF9',
-          secondary: '#424242',
-          accent: '#FF4081',
-          error: '#EF5350',
-          info: '#2196F3',
-          success: '#66BB6A',
-          warning: '#FFA726',
-          background: '#121212',
-          surface: '#1E1E1E'
-        }
-      }
-    }
-  },
-  defaults: {
-    VCard: {
-      rounded: 'lg',
     },
-    VBtn: {
-      rounded: 'lg',
-      fontWeight: '500',
+    defaults: {
+        VCard: {
+            rounded: 'lg',
+        },
+        VBtn: {
+            rounded: 'lg',
+            fontWeight: '500',
+        },
+        VTextField: {
+            variant: 'outlined',
+            density: 'comfortable',
+        },
+        VSelect: {
+            variant: 'outlined',
+            density: 'comfortable',
+        },
     },
-    VTextField: {
-      variant: 'outlined',
-      density: 'comfortable',
-    },
-    VSelect: {
-      variant: 'outlined',
-      density: 'comfortable',
-    },
-  },
 });
 
 
 //Configuracion global de axios
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 //Crear aplicacion VUE
 const app = createApp(App)
