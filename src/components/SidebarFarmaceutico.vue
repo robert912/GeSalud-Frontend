@@ -124,6 +124,7 @@ import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 import { ID_FARMACEUTICO } from '@/constants/globals'
 import { useTheme } from 'vuetify'
+localStorage.setItem('ID_FARMACEUTICO', ID_FARMACEUTICO);
 
 const router = useRouter();
 const route = useRoute();
